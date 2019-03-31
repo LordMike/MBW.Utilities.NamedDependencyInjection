@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\..\_Imports\Common.targets" />
-  <Import Project="..\..\_Imports\Properties.targets" />
-  <Import Project="..\..\_Imports\SourceLink.targets" />
+  <Import Project="..\..\_imports\Common.targets" />
+  <Import Project="..\..\_imports\Properties.targets" />
+  <Import Project="..\..\_imports\SourceLink.targets" />
   
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
