@@ -1,11 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <Import Project="..\..\_imports\Common.targets" />
-  <Import Project="..\..\_imports\Properties.targets" />
-  <Import Project="..\..\_imports\SourceLink.targets" />
+  <Import Project="..\..\imports\Test.targets" />
   
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
-    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
