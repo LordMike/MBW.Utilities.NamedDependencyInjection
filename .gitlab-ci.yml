@@ -1,0 +1,26 @@
+image: microsoft/dotnet:2-sdk
+
+stages:
+- build
+- publish
+
+build:
+  stage: build
+  script:
+  - dotnet build
+  - dotnet test src/MBW.Utilities.DI.Named.Tests
+  - dotnet pack -c Release --include-symbols -p:SymbolPackageFormat=snupkg -o $CI_PROJECT_DIR/Build/
+  artifacts:
+    paths:
+    - Build/*.nupkg
+    - Build/*.snupkg
+    expire_in: 1 week
+
+publish:
+  stage: publish
+  when: manual
+  script:
+  - cd $CI_PROJECT_DIR/Build/
+  - dotnet nuget push *.nupkg -s https://api.nuget.org/v3/index.json -k $NUGET_KEY
+  dependencies:
+  - build

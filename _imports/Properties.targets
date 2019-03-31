@@ -1,0 +1,16 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <VersionPrefix>0.6.0</VersionPrefix>
+  </PropertyGroup>
+
+  <!-- Package -->
+  <PropertyGroup>
+    <Authors>LordMike</Authors>
+    <PackageId>$(AssemblyName)</PackageId>
+    <Product>MBW.Utilities.DI.Named</Product>
+    <Company>MBWarez</Company>
+    <PackageLicenseUrl>https://github.com/LordMike/MBW.Utilities.DI.Named/blob/master/LICENSE.txt</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/LordMike/MBW.Utilities.DI.Named</PackageProjectUrl>
+  </PropertyGroup>
+
+</Project>

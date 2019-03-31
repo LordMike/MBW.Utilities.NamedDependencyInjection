@@ -1,0 +1,15 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- Package -->
+  <PropertyGroup>
+    <RepositoryUrl>https://github.com/LordMike/MBW.Utilities.DI.Named</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+
+    <DebugType>portable</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <!-- Sourcelinking -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-18618-05" PrivateAssets="All"/>
+  </ItemGroup>
+</Project>
