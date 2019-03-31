@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RF.Tracking.Libraries.NamedDI.Implementation
+namespace MBW.Utilities.DI.Named.Implementation
 {
     internal class NamedServiceFactory
     {

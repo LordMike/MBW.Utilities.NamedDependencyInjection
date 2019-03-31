@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.Reflection;
 using System.Reflection.Emit;
 
-namespace RF.Tracking.Libraries.NamedDI.Implementation
+namespace MBW.Utilities.DI.Named.Implementation
 {
     internal static class RegistrationTypeManager
     {
