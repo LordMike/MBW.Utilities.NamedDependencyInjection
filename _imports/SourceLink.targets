@@ -15,7 +15,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-18618-05" PrivateAssets="all" IncludeAssets="runtime; build; native; contentfiles; analyzers" />
+    <SourceLinkGitHubHost Include="gitlab.com" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta-63127-02" PrivateAssets="All" />
   </ItemGroup>
+
+  <Target Name="UseGithubSourcelinkRoot" AfterTargets="$(SourceControlManagerUrlTranslationTargets)">
+    <ItemGroup>
+      <SourceRoot Update="@(SourceRoot)">
+        <ScmRepositoryUrl>https://github.com/LordMike/MBW.Utilities.DI.Named.git</ScmRepositoryUrl>
+      </SourceRoot>
+    </ItemGroup>
+  </Target>
 
 </Project>

@@ -7,7 +7,6 @@ stages:
 build:
   stage: build
   script:
-  - git remote -v
   - dotnet build
   - dotnet test src/MBW.Utilities.DI.Named.Tests
   - dotnet pack -c Release --include-symbols -p:SymbolPackageFormat=snupkg -o $CI_PROJECT_DIR/Build/
