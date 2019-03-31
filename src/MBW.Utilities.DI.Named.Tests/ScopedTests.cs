@@ -1,5 +1,4 @@
 using System;
-using MBW.Utilities.DI.Named.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
