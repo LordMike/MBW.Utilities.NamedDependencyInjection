@@ -1,8 +1,8 @@
 ﻿using System;
-using Microsoft.Extensions.DependencyInjection;
-using RF.Tracking.Libraries.NamedDI.Implementation;
+using MBW.Utilities.DI.Named.Implementation;
 
-namespace RF.Tracking.Libraries.NamedDI.Extensions
+// ReSharper disable once CheckNamespace
+namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceProviderExtensions
     {

@@ -1,9 +1,8 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
-using RF.Tracking.Libraries.NamedDI.Extensions;
 using Xunit;
 
-namespace RF.Tracking.Libraries.NamedDI.Tests
+namespace MBW.Utilities.DI.Named.Tests
 {
     public class ScopedTests
     {
