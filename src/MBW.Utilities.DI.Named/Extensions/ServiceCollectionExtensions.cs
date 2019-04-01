@@ -7,7 +7,7 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionExtensions
     {
-        private static IServiceCollection AddNamed(this IServiceCollection services, string name, Type serviceType, Func<IServiceProvider, object> factory, ServiceLifetime lifetime)
+        private static IServiceCollection AddNamed(IServiceCollection services, string name, Type serviceType, Func<IServiceProvider, object> factory, ServiceLifetime lifetime)
         {
             Type registrationType = RegistrationTypeManager.GetRegistrationWrapperType(serviceType, name, true);
 
@@ -23,7 +23,7 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
 
-        private static IServiceCollection TryAddNamed(this IServiceCollection services, string name, Type serviceType, Func<IServiceProvider, object> factory, ServiceLifetime lifetime)
+        private static IServiceCollection TryAddNamed(IServiceCollection services, string name, Type serviceType, Func<IServiceProvider, object> factory, ServiceLifetime lifetime)
         {
             Type registrationType = RegistrationTypeManager.GetRegistrationWrapperType(serviceType, name, true);
 
@@ -39,12 +39,12 @@ namespace Microsoft.Extensions.DependencyInjection
             return services;
         }
 
-        private static IServiceCollection AddNamed(this IServiceCollection services, string name, Type serviceType, Type implementationType, ServiceLifetime lifetime)
+        private static IServiceCollection AddNamed(IServiceCollection services, string name, Type serviceType, Type implementationType, ServiceLifetime lifetime)
         {
             return AddNamed(services, name, serviceType, provider => ActivatorUtilities.CreateInstance(provider, implementationType), lifetime);
         }
 
-        private static IServiceCollection TryAddNamed(this IServiceCollection services, string name, Type serviceType, Type implementationType, ServiceLifetime lifetime)
+        private static IServiceCollection TryAddNamed(IServiceCollection services, string name, Type serviceType, Type implementationType, ServiceLifetime lifetime)
         {
             return TryAddNamed(services, name, serviceType, provider => ActivatorUtilities.CreateInstance(provider, implementationType), lifetime);
         }
