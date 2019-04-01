@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using MBW.Utilities.DI.Named.Implementation;
 
 // ReSharper disable once CheckNamespace
@@ -8,20 +10,46 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static T GetService<T>(this IServiceProvider provider, string name)
         {
-            Type registrationType = RegistrationTypeManager.GetRegistrationType(typeof(T), name, false);
+            Type registrationType = RegistrationTypeManager.GetRegistrationWrapperType(typeof(T), name, false);
             if (registrationType == null)
                 return default;
 
-            return (T)provider.GetService(registrationType);
+            RegistrationWrapper wrapperService = (RegistrationWrapper)provider.GetService(registrationType);
+
+            return (T)wrapperService.GetInstance(provider);
+        }
+
+        public static IEnumerable<(string name, T service)> GetNamedServices<T>(this IServiceProvider provider)
+        {
+            IEnumerable<(string name, Type registrationType)> registrationTypes = RegistrationTypeManager.GetRegistrationTypesAndNames(typeof(T));
+
+            return registrationTypes
+                .Select(s =>
+                {
+                    RegistrationWrapper wrapperService = (RegistrationWrapper)provider.GetService(s.registrationType);
+                    return (s.name, (T)wrapperService.GetInstance(provider));
+                });
         }
 
         public static T GetRequiredService<T>(this IServiceProvider provider, string name)
         {
-            Type registrationType = RegistrationTypeManager.GetRegistrationType(typeof(T), name, false);
+            Type registrationType = RegistrationTypeManager.GetRegistrationWrapperType(typeof(T), name, false);
             if (registrationType == null)
                 throw new Exception($"Service of type {typeof(T).FullName} not registered with name {name}");
 
-            return (T)provider.GetRequiredService(registrationType);
+            RegistrationWrapper wrapperService = (RegistrationWrapper)provider.GetRequiredService(registrationType);
+
+            return (T)wrapperService.GetInstance(provider);
+        }
+
+        public static IEnumerable<T> GetServices<T>(this IServiceProvider provider, string name)
+        {
+            Type registrationType = RegistrationTypeManager.GetRegistrationWrapperType(typeof(T), name, false);
+            if (registrationType == null)
+                return Enumerable.Empty<T>();
+
+            IEnumerable<RegistrationWrapper> wrapperServices = provider.GetServices(registrationType).Cast<RegistrationWrapper>();
+            return wrapperServices.Select(s => s.GetInstance(provider)).Cast<T>();
         }
     }
 }
