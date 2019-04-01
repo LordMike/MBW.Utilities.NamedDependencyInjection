@@ -8,24 +8,20 @@ namespace Microsoft.Extensions.DependencyInjection
     {
         public static T GetService<T>(this IServiceProvider provider, string name)
         {
-            NamedServiceFactory factory = provider.GetRequiredService<NamedServiceFactory>();
-            object service = factory.Create(typeof(T), name);
-
-            if (service == null)
+            Type registrationType = RegistrationTypeManager.GetRegistrationType(typeof(T), name, false);
+            if (registrationType == null)
                 return default;
 
-            return (T)service;
+            return (T)provider.GetService(registrationType);
         }
 
         public static T GetRequiredService<T>(this IServiceProvider provider, string name)
         {
-            NamedServiceFactory factory = provider.GetRequiredService<NamedServiceFactory>();
-            object service = factory.Create(typeof(T), name);
-
-            if (service == null)
+            Type registrationType = RegistrationTypeManager.GetRegistrationType(typeof(T), name, false);
+            if (registrationType == null)
                 throw new Exception($"Service of type {typeof(T).FullName} not registered with name {name}");
 
-            return (T)service;
+            return (T)provider.GetRequiredService(registrationType);
         }
     }
 }

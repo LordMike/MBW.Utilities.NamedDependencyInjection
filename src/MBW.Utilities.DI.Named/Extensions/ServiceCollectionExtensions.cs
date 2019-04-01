@@ -7,12 +7,6 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionExtensions
     {
-        private static IServiceCollection AddNamedServices(this IServiceCollection services)
-        {
-            services.TryAddTransient<NamedServiceFactory>();
-            return services;
-        }
-
         private static IServiceCollection AddNamed(this IServiceCollection services, string name, Type serviceType, Func<IServiceProvider, object> factory, ServiceLifetime lifetime)
         {
             Type registrationType = RegistrationTypeManager.GetRegistrationType(serviceType, name, true);
@@ -20,7 +14,6 @@ namespace Microsoft.Extensions.DependencyInjection
             ServiceRegistrationWrapper wrapper = new ServiceRegistrationWrapper(factory);
 
             services
-                .AddNamedServices()
                 .Add(new ServiceDescriptor(registrationType, ctx => wrapper.Factory.Invoke(ctx), lifetime));
 
             return services;
@@ -33,7 +26,6 @@ namespace Microsoft.Extensions.DependencyInjection
             ServiceRegistrationWrapper wrapper = new ServiceRegistrationWrapper(factory);
 
             services
-                .AddNamedServices()
                 .TryAdd(new ServiceDescriptor(registrationType, ctx => wrapper.Factory.Invoke(ctx), lifetime));
 
             return services;
@@ -44,7 +36,6 @@ namespace Microsoft.Extensions.DependencyInjection
             Type registrationType = RegistrationTypeManager.GetRegistrationType(serviceType, name, true);
 
             services
-                .AddNamedServices()
                 .Add(new ServiceDescriptor(registrationType, implementationType, lifetime));
 
             return services;
@@ -55,7 +46,6 @@ namespace Microsoft.Extensions.DependencyInjection
             Type registrationType = RegistrationTypeManager.GetRegistrationType(serviceType, name, true);
 
             services
-                .AddNamedServices()
                 .TryAdd(new ServiceDescriptor(registrationType, implementationType, lifetime));
 
             return services;
