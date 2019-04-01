@@ -7,58 +7,46 @@ namespace Microsoft.Extensions.DependencyInjection
 {
     public static class ServiceCollectionExtensions
     {
-        private static IServiceCollection AddNamedServices(this IServiceCollection services)
-        {
-            services.TryAddTransient<NamedServiceFactory>();
-            return services;
-        }
-
         private static IServiceCollection AddNamed(this IServiceCollection services, string name, Type serviceType, Func<IServiceProvider, object> factory, ServiceLifetime lifetime)
         {
-            Type registrationType = RegistrationTypeManager.GetRegistrationType(serviceType, name, true);
-
-            ServiceRegistrationWrapper wrapper = new ServiceRegistrationWrapper(factory);
+            Type registrationType = RegistrationTypeManager.GetRegistrationWrapperType(serviceType, name, true);
 
             services
-                .AddNamedServices()
-                .Add(new ServiceDescriptor(registrationType, ctx => wrapper.Factory.Invoke(ctx), lifetime));
+                .Add(new ServiceDescriptor(registrationType, ctx =>
+                {
+                    RegistrationWrapper wrapperInstance = (RegistrationWrapper)Activator.CreateInstance(registrationType);
+                    wrapperInstance.Factory = factory;
+
+                    return wrapperInstance;
+                }, lifetime));
 
             return services;
         }
 
         private static IServiceCollection TryAddNamed(this IServiceCollection services, string name, Type serviceType, Func<IServiceProvider, object> factory, ServiceLifetime lifetime)
         {
-            Type registrationType = RegistrationTypeManager.GetRegistrationType(serviceType, name, true);
-
-            ServiceRegistrationWrapper wrapper = new ServiceRegistrationWrapper(factory);
+            Type registrationType = RegistrationTypeManager.GetRegistrationWrapperType(serviceType, name, true);
 
             services
-                .AddNamedServices()
-                .TryAdd(new ServiceDescriptor(registrationType, ctx => wrapper.Factory.Invoke(ctx), lifetime));
+                .TryAdd(new ServiceDescriptor(registrationType, ctx =>
+                {
+                    RegistrationWrapper wrapperInstance = (RegistrationWrapper)Activator.CreateInstance(registrationType);
+                    wrapperInstance.Factory = factory;
+
+                    return wrapperInstance;
+                }, lifetime));
 
             return services;
         }
 
         private static IServiceCollection AddNamed(this IServiceCollection services, string name, Type serviceType, Type implementationType, ServiceLifetime lifetime)
         {
-            Type registrationType = RegistrationTypeManager.GetRegistrationType(serviceType, name, true);
-
-            services
-                .AddNamedServices()
-                .Add(new ServiceDescriptor(registrationType, implementationType, lifetime));
-
-            return services;
+            return AddNamed(services, name, serviceType, provider => ActivatorUtilities.CreateInstance(provider, implementationType), lifetime);
         }
 
         private static IServiceCollection TryAddNamed(this IServiceCollection services, string name, Type serviceType, Type implementationType, ServiceLifetime lifetime)
         {
-            Type registrationType = RegistrationTypeManager.GetRegistrationType(serviceType, name, true);
-
-            services
-                .AddNamedServices()
-                .TryAdd(new ServiceDescriptor(registrationType, implementationType, lifetime));
-
-            return services;
+            return TryAddNamed(services, name, serviceType, provider => ActivatorUtilities.CreateInstance(provider, implementationType), lifetime);
         }
 
         public static IServiceCollection AddSingleton<TService>(this IServiceCollection services, string name)
