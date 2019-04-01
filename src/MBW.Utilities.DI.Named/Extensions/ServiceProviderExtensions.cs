@@ -16,7 +16,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             RegistrationWrapper wrapperService = (RegistrationWrapper)provider.GetService(registrationType);
 
-            return (T)wrapperService.GetInstance(provider);
+            return wrapperService.GetInstance<T>(provider);
         }
 
         public static IEnumerable<(string name, T service)> GetNamedServices<T>(this IServiceProvider provider)
@@ -27,7 +27,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 .Select(s =>
                 {
                     RegistrationWrapper wrapperService = (RegistrationWrapper)provider.GetService(s.registrationType);
-                    return (s.name, (T)wrapperService.GetInstance(provider));
+                    return (s.name, wrapperService.GetInstance<T>(provider));
                 });
         }
 
@@ -39,7 +39,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             RegistrationWrapper wrapperService = (RegistrationWrapper)provider.GetRequiredService(registrationType);
 
-            return (T)wrapperService.GetInstance(provider);
+            return wrapperService.GetInstance<T>(provider);
         }
 
         public static IEnumerable<T> GetServices<T>(this IServiceProvider provider, string name)
@@ -49,7 +49,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 return Enumerable.Empty<T>();
 
             IEnumerable<RegistrationWrapper> wrapperServices = provider.GetServices(registrationType).Cast<RegistrationWrapper>();
-            return wrapperServices.Select(s => s.GetInstance(provider)).Cast<T>();
+            return wrapperServices.Select(s => s.GetInstance<T>(provider));
         }
     }
 }

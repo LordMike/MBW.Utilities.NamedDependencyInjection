@@ -9,15 +9,15 @@ namespace MBW.Utilities.DI.Named.Implementation
         private bool _created;
         private object _instance;
 
-        public object GetInstance(IServiceProvider serviceProvider)
+        public T GetInstance<T>(IServiceProvider serviceProvider)
         {
             if (!_created)
             {
-                _instance = Factory(serviceProvider);
+                _instance = (T)Factory(serviceProvider);
                 _created = true;
             }
 
-            return _instance;
+            return (T)_instance;
         }
 
         public void Dispose()
