@@ -49,9 +49,52 @@ namespace Microsoft.Extensions.DependencyInjection
             return TryAddNamed(services, name, serviceType, provider => ActivatorUtilities.CreateInstance(provider, implementationType), lifetime);
         }
 
+        #region Generic add
+        public static IServiceCollection Add<TService>(this IServiceCollection services, string name, ServiceLifetime lifetime)
+        {
+            return Add<TService, TService>(services, name, lifetime);
+        }
+
+        public static IServiceCollection Add<TService, TImplementation>(this IServiceCollection services, string name, ServiceLifetime lifetime) where TImplementation : TService
+        {
+            return AddNamed(services, name, typeof(TService), typeof(TImplementation), lifetime);
+        }
+
+        public static IServiceCollection Add<TService>(this IServiceCollection services, string name, ServiceLifetime lifetime, TService instance)
+        {
+            return AddNamed(services, name, typeof(TService), _ => instance, lifetime);
+        }
+
+        public static IServiceCollection Add<TService>(this IServiceCollection services, string name, ServiceLifetime lifetime, Func<IServiceProvider, TService> factory)
+        {
+            return AddNamed(services, name, typeof(TService), provider => factory(provider), lifetime);
+        }
+
+        public static IServiceCollection TryAdd<TService>(this IServiceCollection services, string name, ServiceLifetime lifetime)
+        {
+            return TryAdd<TService, TService>(services, name, lifetime);
+        }
+
+        public static IServiceCollection TryAdd<TService, TImplementation>(this IServiceCollection services, string name, ServiceLifetime lifetime) where TImplementation : TService
+        {
+            return TryAddNamed(services, name, typeof(TService), typeof(TImplementation), lifetime);
+        }
+
+        public static IServiceCollection TryAdd<TService>(this IServiceCollection services, string name, ServiceLifetime lifetime, TService instance)
+        {
+            return TryAddNamed(services, name, typeof(TService), _ => instance, lifetime);
+        }
+
+        public static IServiceCollection TryAdd<TService>(this IServiceCollection services, string name, ServiceLifetime lifetime, Func<IServiceProvider, TService> factory)
+        {
+            return TryAddNamed(services, name, typeof(TService), provider => factory(provider), lifetime);
+        }
+        #endregion
+
+        #region Singleton
         public static IServiceCollection AddSingleton<TService>(this IServiceCollection services, string name)
         {
-            return AddSingleton<TService, TService>(services, name);
+            return AddNamed(services, name, typeof(TService), typeof(TService), ServiceLifetime.Singleton);
         }
 
         public static IServiceCollection AddSingleton<TService, TImplementation>(this IServiceCollection services, string name) where TImplementation : TService
@@ -69,6 +112,16 @@ namespace Microsoft.Extensions.DependencyInjection
             return AddNamed(services, name, typeof(TService), provider => factory(provider), ServiceLifetime.Singleton);
         }
 
+        public static IServiceCollection TryAddSingleton<TService>(this IServiceCollection services, string name)
+        {
+            return TryAddNamed(services, name, typeof(TService), typeof(TService), ServiceLifetime.Singleton);
+        }
+
+        public static IServiceCollection TryAddSingleton<TService, TImplementation>(this IServiceCollection services, string name) where TImplementation : TService
+        {
+            return TryAddNamed(services, name, typeof(TService), typeof(TImplementation), ServiceLifetime.Singleton);
+        }
+
         public static IServiceCollection TryAddSingleton<TService>(this IServiceCollection services, string name, TService instance)
         {
             return TryAddNamed(services, name, typeof(TService), _ => instance, ServiceLifetime.Singleton);
@@ -78,20 +131,12 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             return TryAddNamed(services, name, typeof(TService), provider => factory(provider), ServiceLifetime.Singleton);
         }
+        #endregion
 
-        public static IServiceCollection TryAddSingleton<TService>(this IServiceCollection services, string name)
-        {
-            return TryAddSingleton<TService, TService>(services, name);
-        }
-
-        public static IServiceCollection TryAddSingleton<TService, TImplementation>(this IServiceCollection services, string name) where TImplementation : TService
-        {
-            return TryAddNamed(services, name, typeof(TService), typeof(TImplementation), ServiceLifetime.Singleton);
-        }
-
+        #region Scoped
         public static IServiceCollection AddScoped<TService>(this IServiceCollection services, string name)
         {
-            return AddScoped<TService, TService>(services, name);
+            return AddNamed(services, name, typeof(TService), typeof(TService), ServiceLifetime.Scoped);
         }
 
         public static IServiceCollection AddScoped<TService, TImplementation>(this IServiceCollection services, string name) where TImplementation : TService
@@ -109,6 +154,16 @@ namespace Microsoft.Extensions.DependencyInjection
             return AddNamed(services, name, typeof(TService), provider => factory(provider), ServiceLifetime.Scoped);
         }
 
+        public static IServiceCollection TryAddScoped<TService>(this IServiceCollection services, string name)
+        {
+            return TryAddNamed(services, name, typeof(TService), typeof(TService), ServiceLifetime.Scoped);
+        }
+
+        public static IServiceCollection TryAddScoped<TService, TImplementation>(this IServiceCollection services, string name) where TImplementation : TService
+        {
+            return TryAddNamed(services, name, typeof(TService), typeof(TImplementation), ServiceLifetime.Scoped);
+        }
+
         public static IServiceCollection TryAddScoped<TService>(this IServiceCollection services, string name, TService instance)
         {
             return TryAddNamed(services, name, typeof(TService), _ => instance, ServiceLifetime.Scoped);
@@ -118,20 +173,12 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             return TryAddNamed(services, name, typeof(TService), provider => factory(provider), ServiceLifetime.Scoped);
         }
+        #endregion
 
-        public static IServiceCollection TryAddScoped<TService>(this IServiceCollection services, string name)
-        {
-            return TryAddScoped<TService, TService>(services, name);
-        }
-
-        public static IServiceCollection TryAddScoped<TService, TImplementation>(this IServiceCollection services, string name) where TImplementation : TService
-        {
-            return TryAddNamed(services, name, typeof(TService), typeof(TImplementation), ServiceLifetime.Scoped);
-        }
-
+        #region Transient
         public static IServiceCollection AddTransient<TService>(this IServiceCollection services, string name)
         {
-            return AddTransient<TService, TService>(services, name);
+            return AddNamed(services, name, typeof(TService), typeof(TService), ServiceLifetime.Transient);
         }
 
         public static IServiceCollection AddTransient<TService, TImplementation>(this IServiceCollection services, string name) where TImplementation : TService
@@ -149,6 +196,16 @@ namespace Microsoft.Extensions.DependencyInjection
             return AddNamed(services, name, typeof(TService), provider => factory(provider), ServiceLifetime.Transient);
         }
 
+        public static IServiceCollection TryAddTransient<TService>(this IServiceCollection services, string name)
+        {
+            return TryAddNamed(services, name, typeof(TService), typeof(TService), ServiceLifetime.Transient);
+        }
+
+        public static IServiceCollection TryAddTransient<TService, TImplementation>(this IServiceCollection services, string name) where TImplementation : TService
+        {
+            return TryAddNamed(services, name, typeof(TService), typeof(TImplementation), ServiceLifetime.Transient);
+        }
+
         public static IServiceCollection TryAddTransient<TService>(this IServiceCollection services, string name, TService instance)
         {
             return TryAddNamed(services, name, typeof(TService), _ => instance, ServiceLifetime.Transient);
@@ -158,15 +215,6 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             return TryAddNamed(services, name, typeof(TService), provider => factory(provider), ServiceLifetime.Transient);
         }
-
-        public static IServiceCollection TryAddTransient<TService>(this IServiceCollection services, string name)
-        {
-            return TryAddTransient<TService, TService>(services, name);
-        }
-
-        public static IServiceCollection TryAddTransient<TService, TImplementation>(this IServiceCollection services, string name) where TImplementation : TService
-        {
-            return TryAddNamed(services, name, typeof(TService), typeof(TImplementation), ServiceLifetime.Transient);
-        }
+        #endregion
     }
 }

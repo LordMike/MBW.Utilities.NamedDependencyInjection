@@ -5,16 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <SourceLinkGitHubHost Include="gitlab.com" />
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-18618-05" PrivateAssets="All"/>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All"/>
   </ItemGroup>
-
-  <Target Name="UseGithubSourcelinkRoot" AfterTargets="$(SourceControlManagerUrlTranslationTargets)">
-    <ItemGroup>
-      <SourceRoot Update="@(SourceRoot)">
-        <ScmRepositoryUrl>https://github.com/LordMike/MBW.Utilities.DI.Named.git</ScmRepositoryUrl>
-      </SourceRoot>
-    </ItemGroup>
-  </Target>
 
 </Project>
