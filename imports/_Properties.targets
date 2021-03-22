@@ -1,7 +1,7 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
   <PropertyGroup>
-    <VersionPrefix>0.8.0</VersionPrefix>
+    <VersionPrefix>0.9.0</VersionPrefix>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -14,7 +14,7 @@
     <PackageId>$(AssemblyName)</PackageId>
     <Product>MBW.Utilities.DI.Named</Product>
     <Company>MBWarez</Company>
-    <PackageLicenseUrl>https://github.com/LordMike/MBW.Utilities.DI.Named/blob/master/LICENSE.txt</PackageLicenseUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/LordMike/MBW.Utilities.DI.Named</PackageProjectUrl>
   </PropertyGroup>
   
