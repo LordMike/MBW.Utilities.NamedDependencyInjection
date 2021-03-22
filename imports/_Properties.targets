@@ -14,7 +14,7 @@
     <PackageId>$(AssemblyName)</PackageId>
     <Product>MBW.Utilities.DI.Named</Product>
     <Company>MBWarez</Company>
-    <PackageLicenseUrl>https://github.com/LordMike/MBW.Utilities.DI.Named/blob/master/LICENSE.txt</PackageLicenseUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/LordMike/MBW.Utilities.DI.Named</PackageProjectUrl>
   </PropertyGroup>
   
