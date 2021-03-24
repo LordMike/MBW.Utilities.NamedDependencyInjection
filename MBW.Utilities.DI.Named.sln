@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26124.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31105.61
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D9B7BEBC-E763-4775-9010-98A486D3AB15}"
 EndProject
@@ -12,14 +12,13 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{034DB423-4779-43CC-845D-6299C50C1758}"
 	ProjectSection(SolutionItems) = preProject
 		.gitlab-ci.yml = .gitlab-ci.yml
+		Directory.Build.props = Directory.Build.props
 		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "imports", "imports", "{741B5928-157B-4409-898E-09C466A8C778}"
 	ProjectSection(SolutionItems) = preProject
-		imports\_Properties.targets = imports\_Properties.targets
-		imports\_SourceLink.targets = imports\_SourceLink.targets
-		imports\Library.targets = imports\Library.targets
+		imports\Local.targets = imports\Local.targets
 		imports\Test.targets = imports\Test.targets
 	EndProjectSection
 EndProject
