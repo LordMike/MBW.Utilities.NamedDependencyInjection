@@ -16,10 +16,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "imports", "imports", "{741B5928-157B-4409-898E-09C466A8C778}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Imports", "_Imports", "{F8350A12-BC5F-4E80-A91A-F706AF6B89D6}"
 	ProjectSection(SolutionItems) = preProject
-		imports\Local.targets = imports\Local.targets
-		imports\Test.targets = imports\Test.targets
+		_Imports\Local.targets = _Imports\Local.targets
+		_Imports\Test.targets = _Imports\Test.targets
 	EndProjectSection
 EndProject
 Global
@@ -63,7 +63,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{773D98FF-51CB-4144-B104-A1ED97B25790} = {D9B7BEBC-E763-4775-9010-98A486D3AB15}
 		{7FCFF4A8-44A1-4844-98A6-D1B618888061} = {D9B7BEBC-E763-4775-9010-98A486D3AB15}
-		{741B5928-157B-4409-898E-09C466A8C778} = {034DB423-4779-43CC-845D-6299C50C1758}
+		{F8350A12-BC5F-4E80-A91A-F706AF6B89D6} = {034DB423-4779-43CC-845D-6299C50C1758}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DBDF14C6-ED6B-4AA9-B173-91C660A9C7B8}

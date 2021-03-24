@@ -8,6 +8,7 @@
   <PropertyGroup>
     <Authors>LordMike</Authors>
     <Company>MBWarez</Company>
+    <Copyright>Michael Bisbjerg $([System.DateTime]::Now.ToString(yyyy))</Copyright>
   </PropertyGroup>
 
   <!-- Release stuff -->
