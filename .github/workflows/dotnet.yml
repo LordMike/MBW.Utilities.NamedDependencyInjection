@@ -32,7 +32,7 @@ jobs:
       run: dotnet build --no-restore
 
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: "[ -f .ci-skip-tests ] && echo 'Skipping tests' || dotnet test --no-build --verbosity normal"
 
     - name: Pack
       if: github.ref == 'refs/heads/master'
