@@ -1,6 +1,6 @@
 ## MBW.Utilities.DI.Named [![Generic Build](https://github.com/LordMike/MBW.Utilities.DI.Named/actions/workflows/dotnet.yml/badge.svg)](https://github.com/LordMike/MBW.Utilities.DI.Named/actions/workflows/dotnet.yml) [![NuGet](https://img.shields.io/nuget/v/MBW.Utilities.DI.Named.svg)](https://www.nuget.org/packages/MBW.Utilities.DI.Named) [![GHPackages](https://img.shields.io/badge/package-alpha-green)](https://github.com/LordMike/MBW.Utilities.DI.Named/packages/690356)
 
-Named services implementation for Microsoft.Extensions.DependencyInjection
+Named services implementation for `Microsoft.Extensions.DependencyInjection`
 
 ## Features
 
