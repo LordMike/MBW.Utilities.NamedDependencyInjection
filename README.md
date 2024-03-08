@@ -2,9 +2,8 @@
 
 Named services implementation for `Microsoft.Extensions.DependencyInjection`
 
-## Before you start!
-
-In .NET 8.0, Microsoft introduced ["Keyed Services"](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-8.0#keyed-services) which may cover what you need. Do check that out before you use this library, as you may be able to achieve your task without additional assemblies.
+> [!TIP]
+> In .NET 8.0, Microsoft introduced ["Keyed Services"](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/dependency-injection?view=aspnetcore-8.0#keyed-services) which may cover what you need. Do check that out before you use this library, as you may be able to achieve your task without additional assemblies.
 
 ## Features
 
