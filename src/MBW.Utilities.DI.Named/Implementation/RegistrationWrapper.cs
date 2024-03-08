@@ -1,28 +1,27 @@
 ﻿using System;
 
-namespace MBW.Utilities.DI.Named.Implementation
+namespace MBW.Utilities.DI.Named.Implementation;
+
+internal class RegistrationWrapper : IDisposable
 {
-    internal class RegistrationWrapper : IDisposable
+    public Func<IServiceProvider, object> Factory { private get; set; }
+
+    private bool _created;
+    private object _instance;
+
+    public T GetInstance<T>(IServiceProvider serviceProvider)
     {
-        public Func<IServiceProvider, object> Factory { private get; set; }
-
-        private bool _created;
-        private object _instance;
-
-        public T GetInstance<T>(IServiceProvider serviceProvider)
+        if (!_created)
         {
-            if (!_created)
-            {
-                _instance = (T)Factory(serviceProvider);
-                _created = true;
-            }
-
-            return (T)_instance;
+            _instance = (T)Factory(serviceProvider);
+            _created = true;
         }
 
-        public void Dispose()
-        {
-            (_instance as IDisposable)?.Dispose();
-        }
+        return (T)_instance;
+    }
+
+    public void Dispose()
+    {
+        (_instance as IDisposable)?.Dispose();
     }
 }

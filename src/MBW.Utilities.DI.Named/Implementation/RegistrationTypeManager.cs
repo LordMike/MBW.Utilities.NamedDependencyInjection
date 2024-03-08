@@ -5,83 +5,82 @@ using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 
-namespace MBW.Utilities.DI.Named.Implementation
+namespace MBW.Utilities.DI.Named.Implementation;
+
+internal static class RegistrationTypeManager
 {
-    internal static class RegistrationTypeManager
+    public const string AssemblyName = "NamedDI.DynamicTypes";
+    public const string MainModuleName = "MainModule";
+    private static readonly ModuleBuilder _moduleBuilder;
+
+    /// <summary>
+    /// Unique type+name => marker-type registrations
+    /// </summary>
+    private static readonly ConcurrentDictionary<(Type serviceType, string name), Type> _registrationTypes = new();
+
+    /// <summary>
+    /// Map service types to names, for listing purposes
+    /// </summary>
+    private static readonly ConcurrentDictionary<Type, (string name, Type registrationType)[]> _registrationTypesByServiceType = new();
+
+    static RegistrationTypeManager()
     {
-        public const string AssemblyName = "NamedDI.DynamicTypes";
-        public const string MainModuleName = "MainModule";
-        private static readonly ModuleBuilder _moduleBuilder;
+        AssemblyName an = new AssemblyName(AssemblyName);
+        AssemblyBuilder assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(an, AssemblyBuilderAccess.Run);
+        _moduleBuilder = assemblyBuilder.DefineDynamicModule(MainModuleName);
+    }
 
-        /// <summary>
-        /// Unique type+name => marker-type registrations
-        /// </summary>
-        private static readonly ConcurrentDictionary<(Type serviceType, string name), Type> _registrationTypes = new();
+    public static Type GetRegistrationWrapperType(Type serviceType, string name, bool allowCreate)
+    {
+        (Type serviceType, string name) key = (serviceType, name);
 
-        /// <summary>
-        /// Map service types to names, for listing purposes
-        /// </summary>
-        private static readonly ConcurrentDictionary<Type, (string name, Type registrationType)[]> _registrationTypesByServiceType = new();
-
-        static RegistrationTypeManager()
+        if (!allowCreate)
         {
-            AssemblyName an = new AssemblyName(AssemblyName);
-            AssemblyBuilder assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(an, AssemblyBuilderAccess.Run);
-            _moduleBuilder = assemblyBuilder.DefineDynamicModule(MainModuleName);
+            _registrationTypes.TryGetValue(key, out Type type);
+            return type;
         }
 
-        public static Type GetRegistrationWrapperType(Type serviceType, string name, bool allowCreate)
+        return _registrationTypes.GetOrAdd(key, tuple =>
         {
-            (Type serviceType, string name) key = (serviceType, name);
+            string typeName = $"{serviceType.FullName}__{name}";
 
-            if (!allowCreate)
-            {
-                _registrationTypes.TryGetValue(key, out Type type);
-                return type;
-            }
+            // Create and record new type
+            TypeBuilder typeBuilder = _moduleBuilder.DefineType(typeName,
+                TypeAttributes.Public | TypeAttributes.Class | TypeAttributes.AutoClass | TypeAttributes.AnsiClass |
+                TypeAttributes.BeforeFieldInit | TypeAttributes.AutoLayout, null);
 
-            return _registrationTypes.GetOrAdd(key, tuple =>
-            {
-                string typeName = $"{serviceType.FullName}__{name}";
+            typeBuilder.SetParent(typeof(RegistrationWrapper));
 
-                // Create and record new type
-                TypeBuilder typeBuilder = _moduleBuilder.DefineType(typeName,
-                    TypeAttributes.Public | TypeAttributes.Class | TypeAttributes.AutoClass | TypeAttributes.AnsiClass |
-                    TypeAttributes.BeforeFieldInit | TypeAttributes.AutoLayout, null);
+            Type registrationWrapperType = typeBuilder.CreateTypeInfo().AsType();
 
-                typeBuilder.SetParent(typeof(RegistrationWrapper));
+            _registrationTypesByServiceType.AddOrUpdate(tuple.serviceType,
+                svcType =>
+                {
+                    (string name, Type registrationType)[] newList = new (string name, Type registrationType)[1];
+                    newList[0] = (tuple.name, registrationWrapperType);
 
-                Type registrationWrapperType = typeBuilder.CreateTypeInfo().AsType();
+                    return newList;
+                },
+                (type, existingList) =>
+                {
+                    // Note: We create new lists here to be able to return immutable lists when queried
+                    (string name, Type registrationType)[] newList = new (string name, Type registrationType)[existingList.Length + 1];
+                    existingList.CopyTo(newList, 0);
 
-                _registrationTypesByServiceType.AddOrUpdate(tuple.serviceType,
-                    svcType =>
-                    {
-                        (string name, Type registrationType)[] newList = new (string name, Type registrationType)[1];
-                        newList[0] = (tuple.name, registrationWrapperType);
+                    newList[newList.Length - 1] = (tuple.name, registrationWrapperType);
 
-                        return newList;
-                    },
-                    (type, existingList) =>
-                    {
-                        // Note: We create new lists here to be able to return immutable lists when queried
-                        (string name, Type registrationType)[] newList = new (string name, Type registrationType)[existingList.Length + 1];
-                        existingList.CopyTo(newList, 0);
+                    return newList;
+                });
 
-                        newList[newList.Length - 1] = (tuple.name, registrationWrapperType);
+            return registrationWrapperType;
+        });
+    }
 
-                        return newList;
-                    });
+    public static IEnumerable<(string name, Type registrationType)> GetRegistrationTypesAndNames(Type serviceType)
+    {
+        if (!_registrationTypesByServiceType.TryGetValue(serviceType, out var lst))
+            return Enumerable.Empty<(string, Type)>();
 
-                return registrationWrapperType;
-            });
-        }
-
-        public static IEnumerable<(string name, Type registrationType)> GetRegistrationTypesAndNames(Type serviceType)
-        {
-            if (!_registrationTypesByServiceType.TryGetValue(serviceType, out var lst))
-                return Enumerable.Empty<(string, Type)>();
-
-            return lst;
-        }
+        return lst;
     }
 }
